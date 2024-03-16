@@ -7,6 +7,7 @@ import com.antoniusbunwijaya.itemsapi.model.response.ItemsResponse;
 import com.antoniusbunwijaya.itemsapi.model.response.PagingResponse;
 import com.antoniusbunwijaya.itemsapi.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,23 +31,35 @@ public class ItemControllerV1 {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ItemResponse>> updateItem(@PathVariable int id, @RequestBody ItemRequest itemRequest) {
         ApiResponse<ItemResponse> response = itemService.updateItem(id, itemRequest);
-        return ResponseEntity.ok(response);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteItem(@PathVariable int id) {
         ApiResponse<Void> response = itemService.deleteItem(id);
-        return ResponseEntity.ok(response);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ItemResponse>> getItemById(@PathVariable int id) {
         ApiResponse<ItemResponse> response = itemService.getItemById(id);
-        return ResponseEntity.ok(response);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     @GetMapping
-    public ResponseEntity<PagingResponse<ItemResponse>> getAllItems(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<PagingResponse<ItemResponse>> getAllItems(@RequestParam(defaultValue = "1") int page,
                                                                     @RequestParam(defaultValue = "10") int size) {
         PagingResponse<ItemResponse> response = itemService.getAllItems(page, size);
         return ResponseEntity.ok(response);

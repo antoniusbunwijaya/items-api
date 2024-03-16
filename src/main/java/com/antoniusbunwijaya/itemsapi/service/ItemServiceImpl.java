@@ -28,16 +28,17 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public ApiResponse<ItemResponse> createItem(ItemRequest itemRequest) {
+        System.out.println(itemRequest);
         Item newItem = new Item();
         newItem.setBarcode(itemRequest.getBarcode());
         newItem.setItemCode(itemRequest.getItemCode());
         newItem.setItemName(itemRequest.getItemName());
         newItem.setCreatedAt(LocalDateTime.now());
-        newItem.setUpdatedAt(LocalDateTime.now());
 
         if (itemRequest.getDescription() != null) {
             Satuan satuan = new Satuan();
             satuan.setDescription(itemRequest.getDescription());
+            satuan.setCreatedAt(LocalDateTime.now());
             newItem.setSatuan(satuan);
         }
 
@@ -61,6 +62,7 @@ public class ItemServiceImpl implements ItemService{
                     satuan = new Satuan();
                 }
                 satuan.setDescription(itemRequest.getDescription());
+                satuan.setUpdatedAt(LocalDateTime.now());
                 existingItem.setSatuan(satuan);
             }
 
@@ -91,12 +93,16 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public PagingResponse<ItemResponse> getAllItems(int page, int size) {
+        page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         Page<Item> itemPage = itemRepository.findAll(pageable);
         List<ItemResponse> itemResponses = itemPage.getContent().stream()
                 .map(this::mapToItemResponse)
                 .collect(Collectors.toList());
-        return new PagingResponse<>(itemPage.getNumber(), itemPage.getTotalPages(), itemPage.getTotalElements(), itemResponses);
+
+        int currentPage = itemPage.getNumber() + 1;
+
+        return new PagingResponse<>(currentPage, itemPage.getTotalPages(), itemPage.getTotalElements(), itemResponses);
     }
 
     @Override

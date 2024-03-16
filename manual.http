@@ -1,0 +1,43 @@
+### Save
+POST {{server-be}}items
+Accept: application/json
+Content-Type: application/json
+
+{
+  "barcode": "1234567890123",
+  "itemCode": "ITM001",
+  "itemName": "Item contoh",
+  "description": "Ini adalah contoh deskripsi barang"
+}
+
+### Update
+PUT {{server-be}}items/{{item-id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "barcode": "1234567890124",
+  "itemCode": "ITM002",
+  "itemName": "Item contoh3",
+  "description": "Ini adalah contoh deskripsi barang update"
+}
+
+### Delete
+DELETE {{server-be}}items/{{item-id}}
+Accept: application/json
+
+### Detail
+GET {{server-be}}items/{{item-id}}
+Accept: application/json
+
+### Pagination
+GET {{server-be}}items?page=1&size=10
+Accept: application/json
+
+### Pagination
+GET {{server-be}}items
+Accept: application/json
+
+### List
+GET {{server-be}}items/all
+Accept: application/json

@@ -32,7 +32,7 @@ public class Item {
     @Column(columnDefinition = "VARCHAR(255)", name = "item_name")
     private String itemName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "satuan_id")
     private Satuan satuan;
 
